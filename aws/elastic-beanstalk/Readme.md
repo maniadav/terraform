@@ -1,23 +1,35 @@
-# Terraform Setup for Backend API Deployment
+# Elastic Beanstalk Terraform Module
 
-This repository contains Terraform code to provision AWS infrastructure for deploying a Dockerized Flask backend using Elastic Beanstalk and ECR.
+This directory contains Terraform configurations for deploying an Elastic Beanstalk environment on AWS.
 
----
+## Files
 
-## 📦 Components Created
+- **main.tf**: Defines the Elastic Beanstalk application and environment.
+- **iam.tf**: Manages IAM roles and instance profiles required for Elastic Beanstalk.
+- **variables.tf**: Contains input variables for the module.
+- **outputs.tf**: Defines the outputs of the module.
+- **provider.tf**: Configures the AWS provider.
+- **Dockerrun.aws.json**: Specifies the Docker image and container configuration for the Elastic Beanstalk environment.
 
-- **Elastic Beanstalk Application** — Application container for the backend service.
-- **Elastic Beanstalk Environment** — Environment running Docker-based deployment.
-- **Amazon ECR Repository** — Docker images are stored here for deployment.
+## Deployment Steps
 
----
-
-## 📂 Resource Deploy Locally
-
-`cd terraform`
-
-`terraform init`
-
-`terraform plan`
-
-`terraform apply`
+1. Initialize Terraform:
+   ```bash
+   terraform init
+   ```
+2. Validate the configuration:
+   ```bash
+   terraform validate
+   ```
+3. Plan the deployment:
+   ```bash
+   terraform plan
+   ```
+4. Apply the deployment:
+   ```bash
+   terraform apply
+   ```
+5. To destroy the resources:
+   ```bash
+   terraform destroy
+   ```
