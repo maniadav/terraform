@@ -71,6 +71,10 @@ Apply the changes to provision the infrastructure:
 terraform apply
 ```
 
+```
+terraform apply -auto-approve
+```
+
 ### 5. Destroy the Infrastructure
 
 To destroy the resources created by Terraform, run:

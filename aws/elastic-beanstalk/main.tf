@@ -9,6 +9,31 @@ resource "aws_elastic_beanstalk_application" "backend_app" {
   description = "Elastic Beanstalk Application for backend API using Docker"
 }
 
+# Add missing Elastic Beanstalk requirements
+
+# Ensure the Elastic Beanstalk environment has a Service Role
+resource "aws_iam_role" "eb_service_role" {
+  name = "elastic_beanstalk_service_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "elasticbeanstalk.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "eb_service_role_policy" {
+  role       = aws_iam_role.eb_service_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"
+}
+
 # Create Elastic Beanstalk Environment
 resource "aws_elastic_beanstalk_environment" "backend_env" {
   name                = var.env_name
@@ -26,6 +51,12 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "PORT"
     value     = "5000"  # Ensure the PORT value is properly defined
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "ServiceRole"
+    value     = aws_iam_role.eb_service_role.name
   }
 
   setting {
