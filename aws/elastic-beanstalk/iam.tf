@@ -1,0 +1,29 @@
+# IAM Role for Elastic Beanstalk
+resource "aws_iam_role" "eb_instance_role" {
+  name = "elastic_beanstalk_instance_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+# Attach managed policy to the role
+resource "aws_iam_role_policy_attachment" "eb_instance_role_policy" {
+  role       = aws_iam_role.eb_instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+}
+
+# Instance Profile for Elastic Beanstalk
+resource "aws_iam_instance_profile" "eb_instance_profile" {
+  name = "elastic_beanstalk_instance_profile"
+  role = aws_iam_role.eb_instance_role.name
+}
