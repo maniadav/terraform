@@ -6,20 +6,18 @@ resource "aws_ecr_repository" "backend_repo" {
 # Add local variable for version name
 locals {
   current_date = formatdate("YYYYMMDD", timestamp())
-  version_name = "Sample-${local.current_date}"
+  version_name = "${var.app_name}-${local.current_date}"
 }
 
 # Create Elastic Beanstalk Application
 resource "aws_elastic_beanstalk_application" "backend_app" {
   name        = var.app_name
-  description = "Elastic Beanstalk Application for backend API using Docker"
+  description = "Elastic Beanstalk Application for ${var.app_name}"
 }
-
-# Add missing Elastic Beanstalk requirements
 
 # Ensure the Elastic Beanstalk environment has a Service Role
 resource "aws_iam_role" "eb_service_role" {
-  name = "elastic_beanstalk_service_role"
+  name = "${var.app_name}-service-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -45,18 +43,18 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
   name                = var.env_name
   application         = aws_elastic_beanstalk_application.backend_app.name
   solution_stack_name = "64bit Amazon Linux 2 v4.1.1 running Docker"
-  wait_for_ready_timeout = "5m"  # Increase timeout to allow more retries
+  wait_for_ready_timeout = "5m"
 
   setting {
     namespace = "aws:elasticbeanstalk:environment"
     name      = "EnvironmentType"
-    value     = "LoadBalanced"  # or "SingleInstance" if you want cheaper
+    value     = "LoadBalanced"
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "PORT"
-    value     = "5000"  # Ensure the PORT value is properly defined
+    value     = "5000"
   }
 
   setting {
@@ -71,7 +69,6 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
     value     = aws_iam_instance_profile.eb_instance_profile.name
   }
 
-  # Update version settings to use dynamic version name
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "APP_VERSION"
@@ -87,7 +84,7 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
   setting {
     namespace = "aws:elasticbeanstalk:command"
     name      = "Timeout"
-    value     = "600"  # Increase deployment timeout
+    value     = "600"
   }
 
   setting {
@@ -100,5 +97,10 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
     namespace = "aws:autoscaling:updatepolicy:rollingupdate"
     name      = "RollingUpdateType"
     value     = "Health"
+  }
+
+  tags = {
+    Environment = "production"
+    Application = var.app_name
   }
 }
