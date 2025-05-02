@@ -3,12 +3,6 @@ resource "aws_ecr_repository" "backend_repo" {
   name = var.ecr_repo_name
 }
 
-# Add local variable for version name
-locals {
-  current_date = formatdate("YYYYMMDD", timestamp())
-  version_name = "Sample-${local.current_date}"
-}
-
 # Create Elastic Beanstalk Application
 resource "aws_elastic_beanstalk_application" "backend_app" {
   name        = var.app_name
@@ -69,36 +63,5 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
     value     = aws_iam_instance_profile.eb_instance_profile.name
-  }
-
-  # Update version settings to use dynamic version name
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "APP_VERSION"
-    value     = local.version_name
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:command"
-    name      = "IgnoreHealthCheck"
-    value     = "true"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:command"
-    name      = "Timeout"
-    value     = "600"  # Increase deployment timeout
-  }
-
-  setting {
-    namespace = "aws:autoscaling:updatepolicy:rollingupdate"
-    name      = "RollingUpdateEnabled"
-    value     = "true"
-  }
-
-  setting {
-    namespace = "aws:autoscaling:updatepolicy:rollingupdate"
-    name      = "RollingUpdateType"
-    value     = "Health"
   }
 }
