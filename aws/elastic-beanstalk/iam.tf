@@ -1,6 +1,6 @@
 # IAM Role for Elastic Beanstalk
 resource "aws_iam_role" "eb_instance_role" {
-  name = "elastic_beanstalk_instance_role"
+  name = var.eb_instance_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -24,6 +24,6 @@ resource "aws_iam_role_policy_attachment" "eb_instance_role_policy" {
 
 # Instance Profile for Elastic Beanstalk
 resource "aws_iam_instance_profile" "eb_instance_profile" {
-  name = "elastic_beanstalk_instance_profile"
+  name = var.eb_instance_profile_name
   role = aws_iam_role.eb_instance_role.name
 }

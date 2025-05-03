@@ -1,6 +1,7 @@
 # Create ECR Repository
 resource "aws_ecr_repository" "backend_repo" {
-  name = var.ecr_repo_name
+  name         = var.ecr_repo_name
+  force_delete = true
 }
 
 # Create Elastic Beanstalk Application
@@ -13,7 +14,7 @@ resource "aws_elastic_beanstalk_application" "backend_app" {
 
 # Ensure the Elastic Beanstalk environment has a Service Role
 resource "aws_iam_role" "eb_service_role" {
-  name = "elastic_beanstalk_service_role"
+  name = var.eb_service_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
