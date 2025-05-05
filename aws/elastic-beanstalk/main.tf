@@ -4,10 +4,24 @@ resource "aws_ecr_repository" "backend_repo" {
   force_delete = true
 }
 
+resource "aws_ecr_lifecycle_policy" "backend_repo_policy" {
+  repository = aws_ecr_repository.backend_repo.name
+
+  policy = var.ecr_lifecycle_policy
+}
+
 # Create Elastic Beanstalk Application
 resource "aws_elastic_beanstalk_application" "backend_app" {
   name        = var.app_name
   description = "Elastic Beanstalk Application for backend API using Docker"
+}
+
+# Create Elastic Beanstalk Application Version
+resource "aws_elastic_beanstalk_application_version" "backend_app_version" {
+  name        = "${var.app_name}-${formatdate("YYYY-MM-DD", timestamp())}"
+  application = aws_elastic_beanstalk_application.backend_app.name
+  bucket      = var.s3_bucket_name
+  key         = var.s3_key
 }
 
 # Add missing Elastic Beanstalk requirements
@@ -41,6 +55,7 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
   application         = aws_elastic_beanstalk_application.backend_app.name
   solution_stack_name = "64bit Amazon Linux 2 v4.1.1 running Docker"
   wait_for_ready_timeout = "5m"  # Increase timeout to allow more retries
+  version_label       = aws_elastic_beanstalk_application_version.backend_app_version.name
 
   setting {
     namespace = "aws:elasticbeanstalk:environment"
@@ -64,5 +79,11 @@ resource "aws_elastic_beanstalk_environment" "backend_env" {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
     value     = aws_iam_instance_profile.eb_instance_profile.name
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:container:docker"
+    name      = "Image"
+    value     = "${aws_ecr_repository.backend_repo.repository_url}:latest"
   }
 }

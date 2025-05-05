@@ -1,0 +1,225 @@
+{
+  "version": 4,
+  "terraform_version": "1.10.5",
+  "serial": 101,
+  "lineage": "43dacaf2-b3e6-2e84-1103-fe643d2ad8de",
+  "outputs": {
+    "ecr_image_version": {
+      "value": "flask-eb-2025-05-03",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_ecr_repository",
+      "name": "backend_repo",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ecr:ap-south-1:993484236288:repository/backend-elastic-beanstalk-ecr",
+            "encryption_configuration": [
+              {
+                "encryption_type": "AES256",
+                "kms_key": ""
+              }
+            ],
+            "force_delete": null,
+            "id": "backend-elastic-beanstalk-ecr",
+            "image_scanning_configuration": [
+              {
+                "scan_on_push": false
+              }
+            ],
+            "image_tag_mutability": "MUTABLE",
+            "name": "backend-elastic-beanstalk-ecr",
+            "registry_id": "993484236288",
+            "repository_url": "993484236288.dkr.ecr.ap-south-1.amazonaws.com/backend-elastic-beanstalk-ecr",
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjoxMjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIwIn0="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_elastic_beanstalk_application",
+      "name": "backend_app",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "appversion_lifecycle": [],
+            "arn": "arn:aws:elasticbeanstalk:ap-south-1:993484236288:application/flask-eb",
+            "description": "Elastic Beanstalk Application for backend API using Docker",
+            "id": "flask-eb",
+            "name": "flask-eb",
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        },
+        {
+          "deposed": "65d7b8b4",
+          "schema_version": 0,
+          "attributes": {
+            "appversion_lifecycle": [],
+            "arn": "arn:aws:elasticbeanstalk:ap-south-1:993484236288:application/flask_eb",
+            "description": "Elastic Beanstalk Application for backend API using Docker",
+            "id": "flask_eb",
+            "name": "flask_eb",
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_instance_profile",
+      "name": "eb_instance_profile",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::993484236288:instance-profile/flask-eb-instance-profile",
+            "create_date": "2025-05-03T12:18:28Z",
+            "id": "flask-eb-instance-profile",
+            "name": "flask-eb-instance-profile",
+            "name_prefix": "",
+            "path": "/",
+            "role": "flask-eb-instance-role",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AIPA6OUCGMYADFBESVXXG"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.eb_instance_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "eb_instance_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::993484236288:role/flask-eb-instance-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-05-03T12:18:27Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "flask-eb-instance-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+            ],
+            "max_session_duration": 3600,
+            "name": "flask-eb-instance-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6OUCGMYAJ56IEL4R7"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "eb_service_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::993484236288:role/flask-eb-service-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"elasticbeanstalk.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-05-03T12:18:26Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "flask-eb-service-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"
+            ],
+            "max_session_duration": 3600,
+            "name": "flask-eb-service-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6OUCGMYAE5K2MDW3O"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "eb_instance_role_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "flask-eb-instance-role-20250503121828801700000002",
+            "policy_arn": "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier",
+            "role": "flask-eb-instance-role"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.eb_instance_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "eb_service_role_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "flask-eb-service-role-20250503121828446200000001",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService",
+            "role": "flask-eb-service-role"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.eb_service_role"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
