@@ -19,7 +19,7 @@ variable "environment" {
 variable "container_port" {
   description = "Port exposed by the docker image"
   type        = number
-  default     = 5000
+  default     = 8000
 }
 
 variable "cpu" {

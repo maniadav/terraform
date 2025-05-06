@@ -75,13 +75,3 @@ variable "app_version" {
   type        = string
   default     = ""
 }
-
-variable "s3_bucket_name" {
-  description = "The name of the S3 bucket to store Elastic Beanstalk application versions."
-  type        = string
-}
-
-variable "s3_key" {
-  description = "The key (path) of the application bundle in the S3 bucket."
-  type        = string
-}
