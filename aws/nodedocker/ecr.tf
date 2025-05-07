@@ -1,7 +1,7 @@
 resource "aws_ecr_repository" "app" {
   name = "${var.app_name}-ecr"
   image_tag_mutability = "MUTABLE"
-
+  force_delete         = true     # This will delete images before deleting the repository
   image_scanning_configuration {
     scan_on_push = true
   }
